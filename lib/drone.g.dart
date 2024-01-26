@@ -104,12 +104,12 @@ Drone _droneDeserialize(
     camResolution: reader.readLong(offsets[0]),
     color: reader.readString(offsets[1]),
     flightDuration: reader.readLong(offsets[2]),
-    id: id,
     imgUrl: reader.readString(offsets[3]),
     name: reader.readString(offsets[4]),
     price: reader.readDouble(offsets[5]),
     velocity: reader.readLong(offsets[6]),
   );
+  object.id = id;
   return object;
 }
 

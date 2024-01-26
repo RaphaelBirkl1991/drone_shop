@@ -1,4 +1,7 @@
+import 'package:crud_with_isar/create_drone.dart';
+import 'package:crud_with_isar/delete_drone.dart';
 import 'package:crud_with_isar/drone.dart';
+import 'package:crud_with_isar/read_drone.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,19 +25,27 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  List<Drone?> droneList = [];
-  List<Drone?> currentList = [];
+  static List<Drone?> droneList = [];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: "/",
+      routes: {
+        "/create": (context) => CreateDrone(
+              droneList: droneList,
+              isar: widget.isar,
+            ),
+        "/read": (context) => const ReadDrone(),
+        "/delete": (context) =>
+            DeleteDrone(droneList: droneList, isar: widget.isar),
+      },
       home: Scaffold(
         body: Column(
           children: [
             ElevatedButton(
                 onPressed: () async {
                   final raptor = Drone(
-                      id: 1,
                       name: "raptor",
                       price: 100.00,
                       color: "black",
@@ -50,7 +61,7 @@ class _MainAppState extends State<MainApp> {
                     droneList = [raptor];
                   });
                 },
-                child: const Text("Drohne anlegen")),
+                child: const Text("Create Mock Drone")),
             ElevatedButton(
                 onPressed: () async {
                   var currentDrone = await widget.isar.drones.get(1);
@@ -59,20 +70,6 @@ class _MainAppState extends State<MainApp> {
                   });
                 },
                 child: const Text("Drohne(n) anzeigen")),
-            ElevatedButton(
-              onPressed: () async {
-                if (droneList.isNotEmpty) {
-                  await widget.isar.writeTxn(() async {
-                    await widget.isar.drones.delete(droneList[0]!.id);
-                  });
-
-                  setState(() {
-                    droneList = [];
-                  });
-                }
-              },
-              child: const Text("Drohne löschen"),
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: droneList.length,

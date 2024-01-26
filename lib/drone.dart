@@ -14,8 +14,7 @@ class Drone {
   String imgUrl;
 
   Drone(
-      {required this.id,
-      required this.name,
+      {required this.name,
       required this.price,
       required this.color,
       required this.velocity,
